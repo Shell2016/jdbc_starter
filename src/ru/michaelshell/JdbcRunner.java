@@ -8,8 +8,14 @@ import java.util.List;
 
 public class JdbcRunner {
     public static void main(String[] args) throws SQLException {
+        try {
+            System.out.println(getFlightsBetween(LocalDate.of(2020, 9, 9).atStartOfDay(), LocalDateTime.now()));
+        } finally {
+            ConnnectionManager.closePool();
+        }
 
-        System.out.println(getFlightsBetween(LocalDate.of(2020, 9, 9).atStartOfDay(), LocalDateTime.now()));
+
+
 
     }
 
@@ -20,7 +26,7 @@ public class JdbcRunner {
                 WHERE departure_date BETWEEN ? AND ?
                 """;
         List<Long> result = new ArrayList<>();
-        try (var connection = ConnnectionManager.open();
+        try (var connection = ConnnectionManager.get();
              var preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setTimestamp(1, Timestamp.valueOf(start));

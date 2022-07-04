@@ -18,7 +18,7 @@ public class BlobRunner {
                 FROM aircraft
                 WHERE id = ?
                 """;
-        try (var connection = ConnnectionManager.open();
+        try (var connection = ConnnectionManager.get();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, 2);
             var result = preparedStatement.executeQuery();
@@ -35,7 +35,7 @@ public class BlobRunner {
                 WHERE model = 'Боинг 737-300'
                 """;
 
-        try (var connection = ConnnectionManager.open();
+        try (var connection = ConnnectionManager.get();
              var preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setBytes(1, Files.readAllBytes(Path.of("resources", "boeing_737-300.jpg")));
             preparedStatement.executeUpdate();
